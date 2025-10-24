@@ -1,0 +1,8 @@
+{
+  "servers": {
+    "Sentry": {
+      "url": "https://mcp.sentry.dev/mcp/olga-blud/food_ordering",
+      "type": "http"
+    }
+  }
+}
