@@ -104,3 +104,13 @@ export const getCurrentUser = async () => {
     throw new Error(error as string);
   }
 };
+
+export const logOut = async () => {
+  try {
+    await account.deleteSession({ sessionId: "current" });
+    console.log("User logged out successfully");
+  } catch (error) {
+    console.log("Logout error:", error);
+    throw new Error(error as string);
+  }
+};
