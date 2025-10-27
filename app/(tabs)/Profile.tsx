@@ -1,3 +1,5 @@
+import ProfileField from "@/components/ProfileField";
+import { images } from "@/constants";
 import { logOut } from "@/lib/appwrite";
 import useAuthStore from "@/store/auth.store";
 import { useRouter } from "expo-router";
@@ -35,6 +37,9 @@ const Profile = () => {
       <Text style={styles.email}>Email: {user.email}</Text>
       <View style={styles.logoutButton}>
         <Button title="Logout" onPress={handleLogout} color="#FE8C00" />
+      </View>
+      <View>
+        <ProfileField label="Name" value={user.name} icon={images.bag} />
       </View>
     </View>
   );

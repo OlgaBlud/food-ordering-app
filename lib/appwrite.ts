@@ -1,4 +1,10 @@
-import { CreateUserParams, SignInParams, User } from "@/type";
+import {
+  CreateUserParams,
+  GetMenuParams,
+  MenuItem,
+  SignInParams,
+  User,
+} from "@/type";
 
 import {
   Account,
@@ -7,6 +13,7 @@ import {
   Databases,
   ID,
   Query,
+  Storage,
   TablesDB,
 } from "react-native-appwrite";
 
@@ -15,15 +22,14 @@ export const appwriteConfig = {
   projectId: process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!,
   platform: process.env.EXPO_PUBLIC_APPWRITE_PLATFORM,
   databaseId: "68f9e0f30026aa607ebb",
+  bucketId: "68ff23ce002682e92ecd",
   usersTable: "user",
-  //   bucketId: "bucketId",
-  //   userCollectionId: "userCollectionId",
-  //   categoriesCollectionId: "categoriesCollectionId",
-  //   menuCollectionId: "menuCollectionId",
-  //   customizationsCollectionId: "customizationsCollectionId",
-  //   menuCustomizationsCollectionId: "menuCustomizationsCollectionId",
+  categoriesTable: "categories",
+  menuTable: "menu",
+  customizationTable: "customization",
+  menuCustomizationsTable: "menu_customizations",
 };
-console.log(appwriteConfig.databaseId);
+// console.log(appwriteConfig.databaseId);
 export const client = new Client();
 
 client
@@ -34,14 +40,16 @@ client
 export const account = new Account(client);
 export const databases = new Databases(client);
 export const tables = new TablesDB(client);
+export const storage = new Storage(client);
 const avatars = new Avatars(client);
-
+// AUTH;
+// Register;
 export const createUser = async ({
   email,
   password,
   name,
 }: CreateUserParams) => {
-  console.log(appwriteConfig.databaseId);
+  //   console.log(appwriteConfig.databaseId);
   // 1. Створюємо користувача в Appwrite Auth
   try {
     const newAccount = await account.create({
@@ -73,7 +81,7 @@ export const createUser = async ({
     throw new Error(error as string);
   }
 };
-
+// LogIn;
 export const signIn = async ({ email, password }: SignInParams) => {
   try {
     const session = await account.createEmailPasswordSession({
@@ -104,7 +112,7 @@ export const getCurrentUser = async () => {
     throw new Error(error as string);
   }
 };
-
+// LogOut
 export const logOut = async () => {
   try {
     await account.deleteSession({ sessionId: "current" });
@@ -112,5 +120,35 @@ export const logOut = async () => {
   } catch (error) {
     console.log("Logout error:", error);
     throw new Error(error as string);
+  }
+};
+
+export const getMenu = async ({ category, query }: GetMenuParams) => {
+  try {
+    const queries: string[] = [];
+    if (category) queries.push(Query.equal("categories", category));
+    if (query) queries.push(Query.search("name", query));
+    const menus = await tables.listRows<MenuItem>({
+      databaseId: appwriteConfig.databaseId,
+      tableId: appwriteConfig.menuTable,
+      queries,
+    });
+    // console.log("Raw rows from Appwrite:", menus.rows);
+    return menus.rows;
+  } catch (e) {
+    throw new Error(e as string);
+  }
+};
+
+export const getCategories = async () => {
+  try {
+    const categories = await tables.listRows({
+      databaseId: appwriteConfig.databaseId,
+      tableId: appwriteConfig.categoriesTable,
+    });
+
+    return categories.rows;
+  } catch (e) {
+    throw new Error(e as string);
   }
 };
