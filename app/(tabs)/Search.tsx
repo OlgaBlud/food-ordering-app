@@ -1,7 +1,7 @@
 import CartButton from "@/components/CartButton";
-import Filter from "@/components/Filter";
+import Filter from "@/components/FilterN";
 import MenuCard from "@/components/MenuCard";
-import SearchBar from "@/components/SearchBar";
+import SearchBarN from "@/components/SearchBarN";
 import { getCategories, getMenu } from "@/lib/appwrite";
 import useAppwrite from "@/lib/useAppwrite";
 import { Category, MenuItem } from "@/type";
@@ -65,7 +65,7 @@ const Search = () => {
               </View>
               <CartButton />
             </View>
-            <SearchBar />
+            <SearchBarN />
             <Filter categories={categories as Category[]} />
           </View>
         )}

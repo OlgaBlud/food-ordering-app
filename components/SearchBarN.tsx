@@ -3,7 +3,7 @@ import { router, useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
 import { Image, TextInput, TouchableOpacity, View } from "react-native";
 
-function SearchBar() {
+function SearchBarN() {
   const params = useLocalSearchParams<{ query: string }>();
   const [query, setQuery] = useState(params.query);
   // const debouncedSearch = useDebouncedCallback(
@@ -48,4 +48,4 @@ function SearchBar() {
   );
 }
 
-export default SearchBar;
+export default SearchBarN;
